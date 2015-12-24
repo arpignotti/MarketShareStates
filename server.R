@@ -15,13 +15,55 @@ wellcare <- read.csv("Data/wellcare.csv",header=TRUE)
 healthnet <- read.csv("Data/healthnet.csv",header=TRUE)
 highmark <- read.csv("Data/highmark.csv",header=TRUE)
 
-zoom <- c('wisconsin','indiana','ohio','michigan','illinois','missouri','iowa',
-          'minnesota','north dakota','south dakota','nebraska','kansas','maine','vermont','new hampshire',
-          'massachusetts','rhode island','connecticut','new york','new jersey','pennsylvania','virginia',
-          'west virginia','maryland','delaware','florida','georgia','alabama','mississippi','louisiana',
-          'arkansas','tennessee','kentucky','texas','oklahoma','new mexico','arizona','colorado','utah',
-          'wyoming','nevada','montana','idaho','washington','oregon','california','north carolina',
-          'south carolina','district of columbia')
+zoom <- c('wisconsin',
+          'indiana',
+          'ohio',
+          'michigan:south','michigan:north',
+          'illinois',
+          'missouri',
+          'iowa',
+          'minnesota',
+          'north dakota',
+          'south dakota',
+          'nebraska',
+          'kansas',
+          'maine',
+          'vermont',
+          'new hampshire',
+          'massachusetts:main',"massachusetts:martha's vineyard",'massachusetts:nantucket',
+          'rhode island',
+          'connecticut',
+          'new york:long island','new york:main',
+          'new jersey',
+          'pennsylvania',
+          'virginia:chesapeake','virginia:main',
+          'west virginia',
+          'maryland',
+          'delaware',
+          'florida',
+          'georgia',
+          'alabama',
+          'mississippi',
+          'louisiana',
+          'arkansas',
+          'tennessee',
+          'kentucky',
+          'texas',
+          'oklahoma',
+          'new mexico',
+          'arizona',
+          'colorado',
+          'utah',
+          'wyoming',
+          'nevada',
+          'montana',
+          'idaho',
+          'washington:main','washington:lopez island','washington:san juan island','washington:whidbey island',
+          'oregon',
+          'california',
+          'north carolina:main','north carolina:knotts',
+          'south carolina',
+          'district of columbia')
 
 function(input, output) {
   output$map <- renderPlot({
@@ -50,6 +92,8 @@ function(input, output) {
       model <- ldply(models,coef)
       colnames(model) <- c('State.Name','int','year')
       model$percent <- model$int + (model$year * input$year)
+      model[model < 1] <- 0
+      model[model > 99] <- 99
       percent_map(model$percent, "darkgreen", "Market Share", regions = zoom)
     }
   })

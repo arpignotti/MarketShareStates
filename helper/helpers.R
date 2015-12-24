@@ -2,13 +2,13 @@
 # It may not work correctly with other data sets if their row order does 
 # not exactly match the order in which the maps package plots counties
 percent_map <- function(var, color, legend.title, min = 0, max = 100, regions = ".") {
-
+  
   # generate vector of fill colors for map
   shades <- colorRampPalette(c("white", color))(100)
 
   # constrain gradient to percents that occur between min and max
   #percents <- as.integer(cut(var, 100, include.lowest = TRUE, ordered = TRUE))
-  fills <- shades[var+1]
+  fills <- shades[var + 1]
 
   # plot choropleth map
   map("state", regions = regions, fill = TRUE, col = fills, 
